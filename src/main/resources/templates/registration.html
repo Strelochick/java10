@@ -1,0 +1,230 @@
+<!-- Файл: registration.html (Регистрация) -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация | МеталлСервис</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2C3E50;
+            --primary-dark: #1A252F;
+            --accent-color: #3498DB;
+            --accent-dark: #2980B9;
+            --text-color: #2C3E50;
+            --bg-color: #ECF0F1;
+            --card-bg: white;
+            --error-color: #E74C3C;
+            --success-color: #27AE60;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .registration-container {
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        .registration-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .registration-header i {
+            font-size: 3rem;
+            color: var(--accent-color);
+            margin-bottom: 15px;
+        }
+        
+        .registration-header h1 {
+            color: var(--primary-dark);
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .registration-header p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--primary-dark);
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #E0E0E0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .btn:hover {
+            background: var(--accent-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .alert {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            text-align: center;
+        }
+        
+        .alert-error {
+            background: #FDEDEC;
+            color: var(--error-color);
+            border: 1px solid var(--error-color);
+        }
+        
+        .alert-success {
+            background: #D5F4E6;
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+        
+        .registration-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .registration-links a {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .registration-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .registration-links p {
+            margin-bottom: 10px;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="registration-container">
+        <div class="registration-header">
+            <i class="fas fa-industry"></i>
+            <h1>МеталлСервис</h1>
+            <p>Регистрация нового клиента</p>
+        </div>
+        
+        <div th:if="${message}" class="alert alert-error" th:text="${message}"></div>
+        
+        <form th:action="@{/registration}" method="post">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Имя:</label>
+                    <input type="text" name="name" class="form-control" placeholder="Введите имя" required>
+                </div>
+                <div class="form-group">
+                    <label>Фамилия:</label>
+                    <input type="text" name="surname" class="form-control" placeholder="Введите фамилию" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" name="email" class="form-control" placeholder="Введите email" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Пароль:</label>
+                <input type="password" name="password" class="form-control" placeholder="Введите пароль" required minlength="8">
+            </div>
+            
+            <div class="form-group">
+                <label>Телефон:</label>
+                <input type="tel" name="phone" class="form-control" placeholder="Введите телефон">
+            </div>
+            
+            <div class="form-group">
+                <label>Роль:</label>
+                <select name="roleId" class="form-control" required>
+                    <option value="">Выберите роль</option>
+                    <option th:each="role : ${roles}" 
+                            th:value="${role.roleId}"   
+                            th:text="${role.roleName}">
+                    </option>
+                </select>
+            </div>
+            
+            <button type="submit" class="btn">
+                <i class="fas fa-user-plus"></i> Зарегистрироваться
+            </button>
+        </form>
+        
+        <div class="registration-links">
+            <p>Уже есть аккаунт? <a href="/login">Войти</a></p>
+            <p><a href="/">← Вернуться на главную</a></p>
+        </div>
+    </div>
+</body>
+</html>

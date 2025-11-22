@@ -1,0 +1,368 @@
+<!-- Файл: index.html -->
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>МеталлСервис | Металлопрокат для строительства и промышленности</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2C3E50;
+            --primary-dark: #1A252F;
+            --primary-light: #34495E;
+            --accent-color: #3498DB;
+            --accent-dark: #2980B9;
+            --text-color: #2C3E50;
+            --text-light: #7F8C8D;
+            --bg-color: #ECF0F1;
+            --card-bg: white;
+            --error-color: #E74C3C;
+            --success-color: #27AE60;
+            --warning-color: #F39C12;
+            --metal-color: #95A5A6;
+            --steel-color: #566573;
+        }
+        
+        * {
+            font-family: 'Roboto', sans-serif;
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            list-style: none; 
+            text-decoration: none; 
+            line-height: 1.6;
+        }
+        
+        body {
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            font-size: 16px;
+        }
+        
+        header {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--primary-color);
+            padding: 15px 50px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .logo {
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            color: #ECF0F1;
+            column-gap: 0.5rem;
+        }
+        
+        .logo i {
+            font-size: 24px;
+            color: #ECF0F1;
+        }
+        
+        .navbar {
+            margin-left: auto;
+            gap: 20px;
+            display: flex;          
+            list-style: none;      
+            padding: 0;            
+            margin: 0;
+        }
+        
+        .navbar a {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #ECF0F1;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s;
+        }
+        
+        .navbar a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            color: #ECF0F1;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 100px auto 0;
+            padding: 20px;
+        }
+        
+        h1, h2, h3 {
+            color: var(--primary-dark);
+            margin-top: 0;
+            font-weight: 600;
+        }
+        
+        h1 {
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        nav {
+            background: var(--primary-dark);
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        nav a:hover {
+            color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            padding: 20px;
+            margin-bottom: 25px;
+            border-top: 3px solid var(--accent-color);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .btn:hover {
+            background: var(--accent-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+        
+        .btn-danger {
+            background: var(--error-color);
+        }
+        
+        .btn-danger:hover {
+            background: #C0392B;
+        }
+        
+        .tagline {
+            color: var(--text-light);
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+        
+        .hero-section {
+            background: linear-gradient(rgba(44, 62, 80, 0.8), rgba(44, 62, 80, 0.8)), 
+                        url('https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 80px 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .hero-section h1 {
+            color: white;
+            border: none;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .hero-section p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 25px;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .feature-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-card i {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 15px;
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .navbar {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .container {
+                margin-top: 140px;
+                padding: 15px;
+            }
+            
+            nav {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/" class="logo">
+            <i class="fas fa-industry"></i>МеталлСервис
+        </a>
+        <ul class="navbar">
+            <li><a href="#home">Главная</a></li>
+            <li><a href="#products">Продукция</a></li>
+            <li><a href="#about">О компании</a></li>
+            <li><a href="#contacts">Контакты</a></li>
+        </ul>
+    </header>
+    
+    <div class="container">
+        <div class="hero-section">
+            <h1><i class="fas fa-hard-hat"></i> МеталлСервис</h1>
+            <p>Поставки металлопроката для строительства и промышленности. Качество, надежность, сроки.</p>
+            <a href="#products" class="btn" style="background: var(--steel-color);">
+                <i class="fas fa-boxes"></i> Смотреть каталог
+            </a>
+        </div>
+        
+        <nav>
+            <a href="/userList"><i class="fas fa-users"></i> Клиенты</a>
+            <a href="/appointmentList"><i class="fas fa-clipboard-list"></i> Заказы</a>
+            <a href="/serviceList"><i class="fas fa-cube"></i> Продукция</a>
+            <a href="/categoryList"><i class="fas fa-tags"></i> Категории</a>
+            <a href="/paymentList"><i class="fas fa-money-bill-wave"></i> Платежи</a>
+            <a href="/paymentMethodList"><i class="fas fa-credit-card"></i> Методы оплаты</a>
+            <a href="/reviewList"><i class="fas fa-comment-alt"></i> Отзывы</a>
+            <a href="/roleList"><i class="fas fa-user-tag"></i> Роли</a>
+            <a href="/statusOrderList"><i class="fas fa-clipboard-check"></i> Статусы заказов</a>
+            
+            <div style="margin-left: auto; display: flex; gap: 15px; align-items: center;">
+                <a href="/user/dashboard" class="btn" style="background: var(--success-color);">
+                    <i class="fas fa-user-circle"></i> Личный кабинет
+                </a>
+                
+                <div sec:authorize="hasRole('ADMIN')">
+                    <a href="/admin/dashboard" class="btn">
+                        <i class="fas fa-cog"></i> Админ-панель
+                    </a>
+                </div>
+                
+                <span sec:authorize="isAuthenticated()" style="color: white;">
+                    <i class="fas fa-user"></i> 
+                    <span sec:authentication="name"></span>
+                </span>
+                
+                <a sec:authorize="!isAuthenticated()" 
+                   href="/login" class="btn btn-sm">
+                    <i class="fas fa-sign-in-alt"></i> Вход
+                </a>
+                
+                <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-sm btn-danger">
+                        <i class="fas fa-sign-out-alt"></i> Выход
+                    </button>
+                </form>
+            </div>
+        </nav>
+        
+        <div class="features">
+            <div class="feature-card">
+                <i class="fas fa-shield-alt"></i>
+                <h3>Качество</h3>
+                <p>Вся продукция соответствует ГОСТ и имеет сертификаты качества</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-shipping-fast"></i>
+                <h3>Доставка</h3>
+                <p>Быстрая доставка по всей России собственным и партнерским транспортом</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-handshake"></i>
+                <h3>Надежность</h3>
+                <p>Работаем с 2005 года. Более 5000 довольных клиентов</p>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2><i class="fas fa-box-open"></i> Наша продукция</h2>
+            <p>Мы предлагаем широкий ассортимент металлопроката для различных отраслей промышленности и строительства:</p>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li>• Листовой прокат (сталь, алюминий, нержавейка)</li>
+                <li>• Сортовой прокат (арматура, круг, квадрат, шестигранник)</li>
+                <li>• Трубный прокат (бесшовные, электросварные, профильные)</li>
+                <li>• Фасонный прокат (уголок, швеллер, двутавр)</li>
+                <li>• Цветные металлы и сплавы</li>
+            </ul>
+            <a href="/serviceList" class="btn">
+                <i class="fas fa-list"></i> Полный каталог
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+</body>
+</html>

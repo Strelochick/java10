@@ -1,0 +1,534 @@
+<!-- Файл: appointmentList.html (Заказы) -->
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Заказы | МеталлСервис</title>
+    <style>
+        :root {
+            --primary-color: #2C3E50;
+            --primary-dark: #1A252F;
+            --primary-light: #34495E;
+            --accent-color: #3498DB;
+            --accent-dark: #2980B9;
+            --text-color: #2C3E50;
+            --text-light: #7F8C8D;
+            --bg-color: #ECF0F1;
+            --card-bg: white;
+            --error-color: #E74C3C;
+            --success-color: #27AE60;
+            --warning-color: #F39C12;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1, h2, h3 {
+            color: var(--primary-dark);
+            margin-top: 0;
+            font-weight: 600;
+        }
+        
+        h1 {
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        nav {
+            background: var(--primary-dark);
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        nav a:hover {
+            color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            padding: 20px;
+            margin-bottom: 25px;
+            border-top: 3px solid var(--accent-color);
+        }
+        
+        .btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .btn:hover {
+            background: var(--accent-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+        
+        .btn-danger {
+            background: var(--error-color);
+        }
+        
+        .btn-danger:hover {
+            background: #C0392B;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 500;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        tr:last-child td {
+            border-bottom: none;
+        }
+        
+        tr:hover {
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--primary-dark);
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #bdbdbd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 14px;
+            transition: border 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--accent-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+            gap: 10px;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .badge-success {
+            background: #D5F4E6;
+            color: var(--success-color);
+        }
+        
+        .badge-warning {
+            background: #FEF9E7;
+            color: var(--warning-color);
+        }
+        
+        .badge-danger {
+            background: #FDEDEC;
+            color: var(--error-color);
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        
+        .alert-success {
+            background: #D5F4E6;
+            color: var(--success-color);
+            border-left: 4px solid var(--success-color);
+        }
+        
+        .edit-form {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .actions {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            nav {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-clipboard-list"></i> Управление заказами</h1>
+        
+        <nav>
+            <a href="/index"><i class="fas fa-home"></i> Главная</a>
+            <a href="/appointmentList" class="active"><i class="fas fa-clipboard-list"></i> Заказы</a>
+            <a href="/userList"><i class="fas fa-users"></i> Клиенты</a>
+        </nav>
+        
+        <div th:if="${param.success}" class="alert alert-success" th:text="${param.success}"></div>
+        
+        <div class="card">
+            <h2><i class="fas fa-search"></i> Поиск заказов</h2>
+            <form th:action="@{/appointmentList}" method="get">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Клиент</label>
+                        <select name="userId">
+                            <option value="">Все клиенты</option>
+                            <option th:each="user : ${users}" 
+                                    th:value="${user.userId}"
+                                    th:selected="${param.userId != null && param.userId == user.userId.toString()}"
+                                    th:text="${user.surname} + ' ' + ${user.name} + ' ' + ${user.lastname}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Продукция</label>
+                        <select name="servicesId">
+                            <option value="">Вся продукция</option>
+                            <option th:each="service : ${services}" 
+                                    th:value="${service.servicesId}"
+                                    th:selected="${param.servicesId != null && param.servicesId == service.servicesId.toString()}"
+                                    th:text="${service.name}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Статус</label>
+                        <select name="statusOrderId">
+                            <option value="">Все статусы</option>
+                            <option value="1" th:selected="${param.statusOrderId == '1'}">Новый</option>
+                            <option value="2" th:selected="${param.statusOrderId == '2'}">В обработке</option>
+                            <option value="3" th:selected="${param.statusOrderId == '3'}">Выполнен</option>
+                            <option value="4" th:selected="${param.statusOrderId == '4'}">Отменен</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Дата от</label>
+                        <input type="datetime-local" name="startDate" th:value="${param.startDate}">
+                    </div>
+                    <div class="form-group">
+                        <label>Дата до</label>
+                        <input type="datetime-local" name="endDate" th:value="${param.endDate}">
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn">
+                    <i class="fas fa-search"></i> Найти
+                </button>
+                <a th:href="@{/appointmentList}" class="btn btn-danger">
+                    <i class="fas fa-times"></i> Сбросить
+                </a>
+            </form>
+        </div>
+        
+        <div th:if="${appointmentToEdit != null}" class="edit-form">
+            <h2><i class="fas fa-edit"></i> Редактирование заказа</h2>
+            <form th:action="@{/appointmentList/update}" method="post">
+                <input type="hidden" name="appointmentId" th:value="${appointmentToEdit.appointmentId}">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Клиент</label>
+                        <select name="userId" required>
+                            <option value="">Выберите клиента</option>
+                            <option th:each="user : ${users}" 
+                                    th:value="${user.userId}"
+                                    th:selected="${user.userId == appointmentToEdit.userId}"
+                                    th:text="${user.surname} + ' ' + ${user.name} + ' ' + ${user.lastname}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Продукция</label>
+                        <select name="servicesId" required>
+                            <option value="">Выберите продукцию</option>
+                            <option th:each="service : ${services}" 
+                                    th:value="${service.servicesId}"
+                                    th:selected="${service.servicesId == appointmentToEdit.servicesId}"
+                                    th:text="${service.name}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Дата и время</label>
+                        <input type="datetime-local" name="orderDate" 
+                               th:value="${#temporals.format(appointmentToEdit.orderDate, 'yyyy-MM-dd') + 'T' + #temporals.format(appointmentToEdit.orderDate, 'HH:mm')}" 
+                               required>
+                    </div>
+                    <div class="form-group">
+                        <label>Количество (тонн)</label>
+                        <input type="number" name="quantity" min="0.1" max="1000" step="0.1"
+                               th:value="${appointmentToEdit.quantity}" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Статус</label>
+                    <select name="statusOrderId" required>
+                        <option value="1" th:selected="${appointmentToEdit.statusOrderId == 1}">Новый</option>
+                        <option value="2" th:selected="${appointmentToEdit.statusOrderId == 2}">В обработке</option>
+                        <option value="3" th:selected="${appointmentToEdit.statusOrderId == 3}">Выполнен</option>
+                        <option value="4" th:selected="${appointmentToEdit.statusOrderId == 4}">Отменен</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="btn">
+                        <i class="fas fa-save"></i> Сохранить изменения
+                    </button>
+                    <a th:href="@{/appointmentList}" class="btn btn-danger">
+                        <i class="fas fa-times"></i> Отмена
+                    </a>
+                </div>
+            </form>
+        </div>
+        
+        <div class="card">
+            <h2><i class="fas fa-plus-circle"></i> Новый заказ</h2>
+            <form th:action="@{/appointmentList/add}" method="post">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Клиент</label>
+                        <select name="userId" required>
+                            <option value="">Выберите клиента</option>
+                            <option th:each="user : ${users}" 
+                                    th:value="${user.userId}"
+                                    th:text="${user.surname} + ' ' + ${user.name} + ' ' + ${user.lastname}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Продукция</label>
+                        <select name="servicesId" required>
+                            <option value="">Выберите продукцию</option>
+                            <option th:each="service : ${services}" 
+                                    th:value="${service.servicesId}"
+                                    th:text="${service.name}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Дата и время</label>
+                        <input type="datetime-local" name="orderDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Количество (тонн)</label>
+                        <input type="number" name="quantity" min="0.1" max="1000" step="0.1" value="1" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Статус</label>
+                    <select name="statusOrderId" required>
+                        <option value="1">Новый</option>
+                        <option value="2">В обработке</option>
+                        <option value="3">Выполнен</option>
+                        <option value="4">Отменен</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn">
+                    <i class="fas fa-save"></i> Сохранить
+                </button>
+            </form>
+        </div>
+        
+        <div class="card">
+            <h2><i class="fas fa-list"></i> Список заказов</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Клиент</th>
+                        <th>Продукция</th>
+                        <th>Дата и время</th>
+                        <th>Кол-во (т)</th>
+                        <th>Статус</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="appointment : ${appointments}">
+                        <td th:text="${appointment.appointmentId}"></td>
+                        <td>
+                            <span th:if="${users != null}">
+                                <span th:each="user : ${users}" 
+                                      th:if="${user.userId == appointment.userId}"
+                                      th:text="${user.surname} + ' ' + ${user.name} + ' ' + ${user.lastname}">
+                                </span>
+                            </span>
+                            <span th:unless="${users != null}">Неизвестный клиент</span>
+                        </td>
+                        <td>
+                            <span th:if="${services != null}">
+                                <span th:each="service : ${services}" 
+                                      th:if="${service.servicesId == appointment.servicesId}"
+                                      th:text="${service.name}">
+                                </span>
+                            </span>
+                            <span th:unless="${services != null}">Неизвестная продукция</span>
+                        </td>
+                        <td th:text="${#temporals.format(appointment.orderDate, 'dd.MM.yyyy HH:mm')}"></td>
+                        <td th:text="${appointment.quantity}"></td>
+                        <td>
+                            <span th:switch="${appointment.statusOrderId}">
+                                <span th:case="1" class="badge badge-warning">Новый</span>
+                                <span th:case="2" class="badge badge-warning">В обработке</span>
+                                <span th:case="3" class="badge badge-success">Выполнен</span>
+                                <span th:case="4" class="badge badge-danger">Отменен</span>
+                            </span>
+                        </td>
+                        <td class="actions">
+                            <a th:href="@{/appointmentList/edit/{id}(id=${appointment.appointmentId})}" 
+                               class="btn btn-sm"
+                               title="Редактировать">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <form th:action="@{/appointmentList/delete/{id}(id=${appointment.appointmentId})}" 
+                                  method="post"
+                                  style="display: inline-block;">
+                                <button type="submit" class="btn btn-sm btn-danger" 
+                                        title="Удалить"
+                                        onclick="return confirm('Удалить заказ?')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="pagination" th:if="${totalPages > 1}">
+                <a th:if="${currentPage > 0}" 
+                   th:href="@{/appointmentList(page=${currentPage - 1}, userId=${param.userId}, servicesId=${param.servicesId}, statusOrderId=${param.statusOrderId}, startDate=${param.startDate}, endDate=${param.endDate})}" 
+                   class="btn">
+                    <i class="fas fa-chevron-left"></i> Назад
+                </a>
+                <span class="page-info" th:text="'Страница ' + (${currentPage} + 1) + ' из ' + ${totalPages}"></span>
+                <a th:if="${currentPage < totalPages - 1}" 
+                   th:href="@{/appointmentList(page=${currentPage + 1}, userId=${param.userId}, servicesId=${param.servicesId}, statusOrderId=${param.statusOrderId}, startDate=${param.startDate}, endDate=${param.endDate})}" 
+                   class="btn">
+                    Вперед <i class="fas fa-chevron-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

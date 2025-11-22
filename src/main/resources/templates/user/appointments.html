@@ -1,0 +1,519 @@
+<!-- Файл: appointments.html (Мои заказы) -->
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои заказы - МеталлСервис</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2C3E50;
+            --primary-dark: #1A252F;
+            --primary-light: #34495E;
+            --accent-color: #3498DB;
+            --accent-dark: #2980B9;
+            --text-color: #2C3E50;
+            --text-light: #7F8C8D;
+            --bg-color: #ECF0F1;
+            --card-bg: white;
+            --error-color: #E74C3C;
+            --success-color: #27AE60;
+            --warning-color: #F39C12;
+            --info-color: #3498DB;
+        }
+        
+        * {
+            font-family: 'Roboto', sans-serif;
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            list-style: none; 
+            text-decoration: none; 
+            line-height: 1.6;
+        }
+        
+        body {
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            font-size: 16px;
+        }
+        
+        header {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--primary-color);
+            padding: 15px 50px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .logo {
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            color: #ECF0F1;
+            column-gap: 0.5rem;
+        }
+        
+        .logo i {
+            font-size: 28px;
+            color: #ECF0F1;
+        }
+        
+        .navbar {
+            margin-left: auto;
+            gap: 20px;
+            display: flex;          
+            list-style: none;      
+            padding: 0;            
+            margin: 0;
+        }
+        
+        .navbar a {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #ECF0F1;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .navbar a:hover, .navbar a.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ECF0F1;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            column-gap: 0.5rem;
+            color: #ECF0F1;
+        }
+        
+        .user-info i {
+            font-size: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 100px auto 0;
+            padding: 20px;
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: white;
+            border: none;
+        }
+        
+        .page-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .orders-section {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .orders-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .orders-header h2 {
+            color: var(--primary-dark);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+        }
+        
+        .btn:hover {
+            background: var(--accent-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn-danger {
+            background: var(--error-color);
+        }
+        
+        .btn-danger:hover {
+            background: #C0392B;
+        }
+        
+        .order-card {
+            background: var(--bg-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--accent-color);
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .order-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .order-main-info {
+            flex: 1;
+        }
+        
+        .order-product-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+        
+        .order-date-time {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-color);
+            background: var(--bg-color);
+            padding: 6px 12px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        
+        .order-status {
+            display: inline-block;
+            padding: 6px 15px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .status-new {
+            background: var(--info-color);
+            color: white;
+        }
+        
+        .status-processing {
+            background: var(--warning-color);
+            color: white;
+        }
+        
+        .status-completed {
+            background: var(--success-color);
+            color: white;
+        }
+        
+        .status-cancelled {
+            background: var(--error-color);
+            color: white;
+        }
+        
+        .order-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .detail-label {
+            font-size: 14px;
+            color: #666;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .detail-label i {
+            color: var(--accent-color);
+            width: 16px;
+        }
+        
+        .detail-value {
+            font-weight: 600;
+            color: var(--text-color);
+            font-size: 16px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            border-left: 3px solid var(--accent-color);
+        }
+        
+        .order-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+        
+        .no-orders {
+            text-align: center;
+            color: var(--text-color);
+            padding: 40px 20px;
+        }
+        
+        .no-orders i {
+            font-size: 4rem;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+        
+        .no-orders h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--primary-dark);
+        }
+        
+        .no-orders p {
+            margin-bottom: 25px;
+            color: #666;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        
+        .alert-success {
+            background: #D5F4E6;
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+        
+        .alert-error {
+            background: #FDEDEC;
+            color: var(--error-color);
+            border: 1px solid var(--error-color);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin-top: 120px;
+                padding: 15px;
+            }
+            
+            .orders-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .order-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .order-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .order-actions {
+                justify-content: center;
+            }
+            
+            .navbar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/user/dashboard" class="logo">
+            <i class='fas fa-industry'></i>
+            МеталлСервис
+        </a>
+        
+        <ul class="navbar">
+            <li><a href="/user/dashboard">Главная</a></li>
+            <li><a href="/user/appointments" class="active">Мои заказы</a></li>
+            <li><a href="/user/book-appointment">Оформить заказ</a></li>
+        </ul>
+        
+        <div class="user-info">
+            <i class="fas fa-user"></i>
+            <span th:text="${user.name + ' ' + user.surname}">Имя Фамилия</span>
+        </div>
+    </header>
+    
+    <div class="container">
+        <!-- Уведомления -->
+        <div th:if="${param.cancelled}" class="alert alert-success">
+            <i class="fas fa-check-circle"></i> Заказ успешно отменен!
+        </div>
+        
+        <div th:if="${param.error}" class="alert alert-error">
+            <i class="fas fa-exclamation-circle"></i> Произошла ошибка при отмене заказа.
+        </div>
+        
+        <!-- Заголовок страницы -->
+        <div class="page-header">
+            <h1><i class="fas fa-clipboard-list"></i> Мои заказы</h1>
+            <p>Управляйте своими заказами на металлопрокат</p>
+        </div>
+        
+        <!-- Секция заказов -->
+        <div class="orders-section">
+            <div class="orders-header">
+                <h2><i class="fas fa-list"></i> Все заказы</h2>
+                <a href="/user/book-appointment" class="btn">
+                    <i class="fas fa-plus"></i> Новый заказ
+                </a>
+            </div>
+            
+            <!-- Список заказов -->
+            <div th:if="${#lists.isEmpty(appointments)}" class="no-orders">
+                <i class="fas fa-clipboard-list"></i>
+                <h3>У вас пока нет заказов</h3>
+                <p>Оформите заказ на металлопрокат, чтобы начать сотрудничество</p>
+                <a href="/user/book-appointment" class="btn">
+                    <i class="fas fa-plus"></i> Оформить заказ
+                </a>
+            </div>
+            
+            <div th:each="appointment : ${appointments}" class="order-card">
+                <div class="order-header">
+                    <div class="order-main-info">
+                        <div class="order-product-name" th:text="${appointment.serviceName ?: 'Продукция не указана'}">
+                            Арматура А500С
+                        </div>
+                        <div class="order-date-time" th:text="${#temporals.format(appointment.orderDate, 'dd.MM.yyyy в HH:mm')}">
+                            01.01.2024 в 10:00
+                        </div>
+                    </div>
+                    <div>
+                        <span class="order-status status-new" 
+                              th:classappend="${appointment.statusOrderId == 1} ? 'status-new' : 
+                                            (appointment.statusOrderId == 2) ? 'status-processing' : 
+                                            (appointment.statusOrderId == 3) ? 'status-completed' : 'status-cancelled'"
+                              th:text="${appointment.statusName ?: 'Новый'}">
+                            Новый
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="order-details">
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <i class="fas fa-calendar-alt"></i> Дата и время
+                        </div>
+                        <div class="detail-value" th:text="${#temporals.format(appointment.orderDate, 'dd MMMM yyyy, HH:mm')}">
+                            01 января 2024, 10:00
+                        </div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <i class="fas fa-cube"></i> Продукция
+                        </div>
+                        <div class="detail-value" th:text="${appointment.serviceName ?: 'Продукция не указана'}">
+                            Арматура А500С
+                        </div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <i class="fas fa-weight-hanging"></i> Количество
+                        </div>
+                        <div class="detail-value" th:text="${appointment.quantity} + ' тонн'">5 тонн</div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <i class="fas fa-info-circle"></i> Номер заказа
+                        </div>
+                        <div class="detail-value" th:text="'#' + ${appointment.appointmentId}">#123</div>
+                    </div>
+                </div>
+                
+                <div class="order-actions">
+                    <a th:if="${appointment.statusOrderId == 1}" 
+                       th:href="@{/user/cancel-appointment/{id}(id=${appointment.appointmentId})}"
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('Вы уверены, что хотите отменить этот заказ?')">
+                        <i class="fas fa-times"></i> Отменить заказ
+                    </a>
+                    
+                    <span th:if="${appointment.statusOrderId == 2}" class="btn btn-sm" 
+                          style="background: var(--warning-color); cursor: default;">
+                        <i class="fas fa-cog"></i> В обработке
+                    </span>
+                    
+                    <span th:if="${appointment.statusOrderId == 3}" class="btn btn-sm" 
+                          style="background: var(--success-color); cursor: default;">
+                        <i class="fas fa-check"></i> Выполнен
+                    </span>
+                    
+                    <span th:if="${appointment.statusOrderId == 4}" class="btn btn-sm" 
+                          style="background: var(--error-color); cursor: default;">
+                        <i class="fas fa-times"></i> Отменен
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+</body>
+</html>

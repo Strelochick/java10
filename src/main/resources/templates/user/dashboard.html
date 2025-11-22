@@ -1,0 +1,438 @@
+<!-- Файл: dashboard.html (Личный кабинет клиента) -->
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет - МеталлСервис</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2C3E50;
+            --primary-dark: #1A252F;
+            --primary-light: #34495E;
+            --accent-color: #3498DB;
+            --accent-dark: #2980B9;
+            --text-color: #2C3E50;
+            --text-light: #7F8C8D;
+            --bg-color: #ECF0F1;
+            --card-bg: white;
+            --error-color: #E74C3C;
+            --success-color: #27AE60;
+            --warning-color: #F39C12;
+            --info-color: #3498DB;
+        }
+        
+        * {
+            font-family: 'Roboto', sans-serif;
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            list-style: none; 
+            text-decoration: none; 
+            line-height: 1.6;
+        }
+        
+        body {
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            font-size: 16px;
+        }
+        
+        header {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--primary-color);
+            padding: 15px 50px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .logo {
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            color: #ECF0F1;
+            column-gap: 0.5rem;
+        }
+        
+        .logo i {
+            font-size: 28px;
+            color: #ECF0F1;
+        }
+        
+        .navbar {
+            margin-left: auto;
+            gap: 20px;
+            display: flex;          
+            list-style: none;      
+            padding: 0;            
+            margin: 0;
+        }
+        
+        .navbar a {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #ECF0F1;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .navbar a:hover, .navbar a.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ECF0F1;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            column-gap: 0.5rem;
+            color: #ECF0F1;
+        }
+        
+        .user-info i {
+            font-size: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 100px auto 0;
+            padding: 20px;
+        }
+        
+        .welcome-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .welcome-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: white;
+            border: none;
+        }
+        
+        .welcome-section p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .action-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .action-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-top: 4px solid var(--accent-color);
+        }
+        
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .action-card i {
+            font-size: 3rem;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+        }
+        
+        .action-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+        }
+        
+        .action-card p {
+            color: var(--text-color);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+        }
+        
+        .btn:hover {
+            background: var(--accent-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn-secondary {
+            background: var(--info-color);
+        }
+        
+        .btn-secondary:hover {
+            background: #2980B9;
+        }
+        
+        .recent-orders {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .recent-orders h2 {
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .order-item {
+            background: var(--bg-color);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--accent-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        
+        .order-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .order-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .order-main-info {
+            flex: 1;
+        }
+        
+        .order-product-name {
+            font-weight: 700;
+            color: var(--primary-dark);
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+        
+        .order-date-time {
+            color: var(--text-color);
+            font-weight: 600;
+            background: var(--bg-color);
+            padding: 4px 10px;
+            border-radius: 15px;
+            display: inline-block;
+            font-size: 0.9rem;
+        }
+        
+        .order-status-container {
+            margin-left: 15px;
+        }
+        
+        .order-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .status-new {
+            background: var(--info-color);
+            color: white;
+        }
+        
+        .status-processing {
+            background: var(--warning-color);
+            color: white;
+        }
+        
+        .status-completed {
+            background: var(--success-color);
+            color: white;
+        }
+        
+        .status-cancelled {
+            background: var(--error-color);
+            color: white;
+        }
+        
+        .no-orders {
+            text-align: center;
+            color: var(--text-color);
+            font-style: italic;
+            padding: 20px;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        
+        .alert-success {
+            background: #D5F4E6;
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+        
+        .alert-error {
+            background: #FDEDEC;
+            color: var(--error-color);
+            border: 1px solid var(--error-color);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin-top: 120px;
+                padding: 15px;
+            }
+            
+            .action-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .welcome-section h1 {
+                font-size: 2rem;
+            }
+            
+            .navbar {
+                display: none;
+            }
+            
+            .order-item {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            
+            .order-status-container {
+                margin-left: 0;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/user/dashboard" class="logo">
+            <i class='fas fa-industry'></i>
+            МеталлСервис
+        </a>
+        
+        <ul class="navbar">
+            <li><a href="/user/dashboard" class="active">Главная</a></li>
+            <li><a href="/user/appointments">Мои заказы</a></li>
+            <li><a href="/user/book-appointment">Оформить заказ</a></li>
+        </ul>
+        
+        <div class="user-info">
+            <i class="fas fa-user"></i>
+            <span th:text="${user.name + ' ' + user.surname}">Имя Фамилия</span>
+        </div>
+    </header>
+    
+    <div class="container">
+        <!-- Уведомления -->
+        <div th:if="${param.success}" class="alert alert-success">
+            <i class="fas fa-check-circle"></i> Заказ успешно создан!
+        </div>
+        
+        <div th:if="${param.error}" class="alert alert-error">
+            <i class="fas fa-exclamation-circle"></i> Произошла ошибка при создании заказа.
+        </div>
+        
+        <!-- Приветственная секция -->
+        <div class="welcome-section">
+            <h1><i class="fas fa-hard-hat"></i> Добро пожаловать!</h1>
+            <p>Личный кабинет клиента компании "МеталлСервис"</p>
+        </div>
+        
+        <!-- Карточки действий -->
+        <div class="action-cards">
+            <div class="action-card">
+                <i class="fas fa-cart-plus"></i>
+                <h3>Оформить заказ</h3>
+                <p>Выберите металлопрокат и оформите заказ на поставку</p>
+                <a href="/user/book-appointment" class="btn">
+                    <i class="fas fa-plus"></i> Оформить заказ
+                </a>
+            </div>
+            
+            <div class="action-card">
+                <i class="fas fa-clipboard-list"></i>
+                <h3>Мои заказы</h3>
+                <p>Просмотрите все ваши заказы, их статус и детали</p>
+                <a href="/user/appointments" class="btn btn-secondary">
+                    <i class="fas fa-list"></i> Посмотреть
+                </a>
+            </div>
+        </div>
+        
+        <!-- Последние заказы -->
+        <div class="recent-orders">
+            <h2><i class="fas fa-history"></i> Последние заказы</h2>
+            
+            <div th:if="${#lists.isEmpty(appointments)}" class="no-orders">
+                <i class="fas fa-clipboard-list" style="font-size: 2rem; color: #ccc; margin-bottom: 10px;"></i>
+                <p>У вас пока нет заказов</p>
+                <a href="/user/book-appointment" class="btn" style="margin-top: 15px;">
+                    <i class="fas fa-plus"></i> Оформить первый заказ
+                </a>
+            </div>
+            
+            <div th:each="appointment : ${appointments}" class="order-item">
+                <div class="order-main-info">
+                    <div class="order-product-name" th:text="${appointment.serviceName ?: 'Продукция не указана'}">
+                        Арматура А500С
+                    </div>
+                    <div class="order-date-time" th:text="${#temporals.format(appointment.orderDate, 'dd.MM.yyyy в HH:mm')}">
+                        01.01.2024 в 10:00
+                    </div>
+                </div>
+                <div class="order-status-container">
+                    <span class="order-status status-new" 
+                          th:classappend="${appointment.statusOrderId == 1} ? 'status-new' : 
+                                        (appointment.statusOrderId == 2) ? 'status-processing' : 
+                                        (appointment.statusOrderId == 3) ? 'status-completed' : 'status-cancelled'"
+                          th:text="${appointment.statusName ?: 'Новый'}">
+                        Новый
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+</body>
+</html>
