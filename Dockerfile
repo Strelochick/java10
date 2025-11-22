@@ -9,6 +9,9 @@ COPY pom.xml .
 COPY mvnw .
 COPY .mvn .mvn
 
+# Даем права на выполнение для Maven wrapper
+RUN chmod +x mvnw
+
 # Устанавливаем Maven зависимости
 RUN ./mvnw dependency:go-offline -B
 
