@@ -49,7 +49,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http, DaoAuthenticat
                 "/serviceList/**",
                 "/categoryList/**",
                 "/paymentList/**"
-            ).hasAnyAuthority("ROLE_DOCTOR", "ROLE_ADMIN", "ROLE_CLIENT")
+            ).hasAnyAuthority("ROLE_DOCTOR", "ROLE_ADMIN", "ROLE_PATIENT")
 
             .requestMatchers("/appointmentList/**")
                 .hasAnyAuthority("ROLE_PATIENT", "ROLE_DOCTOR", "ROLE_ADMIN")
